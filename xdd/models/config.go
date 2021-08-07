@@ -29,16 +29,18 @@ type Container struct {
 	Config    string
 }
 type Yaml struct {
-	Containers []Container
-	Qrcode     string
-	Master     string
-	Mode       string
-	Static     string
-	Database   string
-	QywxKey    string `yaml:"qywx_key"`
-	Resident   string
-	UserAgent  string `yaml:"user_agent"`
-	Theme      string
+	Containers       []Container
+	Qrcode           string
+	Master           string
+	Mode             string
+	Static           string
+	Database         string
+	QywxKey          string `yaml:"qywx_key"`
+	Resident         string
+	UserAgent        string `yaml:"user_agent"`
+	Theme            string
+	TelegramBotToken string `yaml:"telegram_bot_token"`
+	TelegramUserID   int    `yaml:"telegram_user_id"`
 }
 
 var Balance = "balance"
@@ -59,7 +61,7 @@ func initConfig() {
 		s, _ := ioutil.ReadAll(f)
 		if len(s) == 0 {
 			logs.Info("下载配置%s", name)
-			r, err := httplib.Get("https://ghproxy.com/https://raw.githubusercontent.com/cdle/jd_study/main/jdc/conf/" + name).Response()
+			r, err := httplib.Get("https://ghproxy.com/https://raw.githubusercontent.com/cdle/jd_study/main/xdd/conf/" + name).Response()
 			if err == nil {
 				io.Copy(f, r.Body)
 			}

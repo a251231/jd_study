@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/beego/beego/v2/client/httplib"
 	"github.com/beego/beego/v2/core/logs"
@@ -26,7 +27,7 @@ func main() {
 	})
 	web.Get("/", func(ctx *context.Context) {
 		if models.Config.Theme == "" {
-			models.Config.Theme = "https://ghproxy.com/https://raw.githubusercontent.com/cdle/jd_study/main/jdc/theme/survey.html"
+			models.Config.Theme = "https://ghproxy.com/https://raw.githubusercontent.com/cdle/jd_study/main/xdd/theme/bidong.html"
 		}
 		if theme != "" {
 			ctx.WriteString(theme)
@@ -35,17 +36,19 @@ func main() {
 		if strings.Contains(models.Config.Theme, "http") {
 			logs.Info("下载最新主题")
 			s, _ := httplib.Get(models.Config.Theme).String()
-			theme = s
-			ctx.WriteString(s)
-			return
-		} else {
-			f, err := os.Open(models.Config.Theme)
-			if err == nil {
-				d, _ := ioutil.ReadAll(f)
-				theme = string(d)
-				ctx.WriteString(string(d))
+			if s != "" {
+				theme = s
+				ctx.WriteString(s)
 				return
 			}
+			logs.Warn("主题下载失败，使用默认主题")
+		}
+		f, err := os.Open(models.Config.Theme)
+		if err == nil {
+			d, _ := ioutil.ReadAll(f)
+			theme = string(d)
+			ctx.WriteString(string(d))
+			return
 		}
 	})
 	web.Router("/api/login/qrcode", &controllers.LoginController{}, "get:GetQrcode")
@@ -63,9 +66,9 @@ func main() {
 	web.BConfig.WebConfig.Session.SessionOn = true
 	web.BConfig.WebConfig.Session.SessionGCMaxLifetime = 3600
 	web.BConfig.WebConfig.Session.SessionName = name
-	// go func() {
-	// 	time.Sleep(time.Second)
-	// 	killp()
-	// }()
+	go func() {
+		time.Sleep(time.Second * 4)
+		(&models.JdCookie{}).Push("小滴滴已启动")
+	}()
 	web.Run()
 }
