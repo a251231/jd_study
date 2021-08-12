@@ -91,6 +91,18 @@ var Admin = `<html lang="zh-cn">
                         width: 150,
                         align: 'center',
                     }, {
+                        field: 'QQ',
+                        title: 'QQ',
+                        width: 120,
+                        edit: 'text',
+                        align: 'center',
+                    }, {
+                        field: 'PushPlus',
+                        title: 'Push+',
+                        width: 120,
+                        edit: 'text',
+                        align: 'center',
+                    }, {
                         field: 'PtKey',
                         title: 'PtKey',
                         edit: 'text',
@@ -104,6 +116,7 @@ var Admin = `<html lang="zh-cn">
         table.on('edit(accounts)', function(obj) {
             obj.data.Priority = +obj.data.Priority
             obj.data.JinLi = +obj.data.JinLi
+            obj.data.QQ = +obj.data.QQ
             layui.$.ajax({
                 url: '/api/account',
                 type: 'POST',
